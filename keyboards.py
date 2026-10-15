@@ -64,13 +64,10 @@ def main_menu(user_id: int) -> ReplyKeyboardMarkup | ReplyKeyboardRemove:
 
 
 def admin_menu() -> ReplyKeyboardMarkup:
+    """Admin oqimlari (kino qo'shish va h.k.) tugagach: pastda faqat «Admin panel» tugmasi qoladi.
+    Bo'limlarning o'zi endi inline tugmalarda (admin_panel_kb)."""
     return ReplyKeyboardMarkup(
-        keyboard=[
-            [KeyboardButton(text=BTN_ADD_MOVIE), KeyboardButton(text=BTN_MOVIES)],
-            [KeyboardButton(text=BTN_STATS), KeyboardButton(text=BTN_CHANNELS)],
-            [KeyboardButton(text=BTN_TEMPLATE), KeyboardButton(text=BTN_ANNOUNCE)],
-            [KeyboardButton(text=BTN_EMOJI), KeyboardButton(text=BTN_BACK)],
-        ],
+        keyboard=[[KeyboardButton(text=BTN_ADMIN)]],
         resize_keyboard=True,
     )
 
@@ -120,10 +117,58 @@ def select_channel_menu(request_id: int = CHANNEL_REQUEST_ID) -> ReplyKeyboardMa
 # ---------- inline klaviaturalar ----------
 
 
+def _back_row(data: str = "adm:home", text: str = "◀️ Admin panel") -> list[InlineKeyboardButton]:
+    return [InlineKeyboardButton(text=text, callback_data=data)]
+
+
+def back_kb(data: str = "adm:home", text: str = "◀️ Admin panel") -> InlineKeyboardMarkup:
+    return InlineKeyboardMarkup(inline_keyboard=[_back_row(data, text)])
+
+
+def user_menu_kb(admin: bool = False) -> InlineKeyboardMarkup:
+    """Bosh menyu — xush kelibsiz xabari tagida."""
+    rows = [
+        [
+            InlineKeyboardButton(text="🆕 Yangi kinolar", callback_data="u:new:0"),
+            InlineKeyboardButton(text="🔥 Top kinolar", callback_data="u:top"),
+        ],
+        [
+            InlineKeyboardButton(text="🎞 Janrlar", callback_data="u:genres"),
+            InlineKeyboardButton(text="🔎 Qidirish", callback_data="u:find"),
+        ],
+        [InlineKeyboardButton(text="ℹ️ Yordam", callback_data="u:help")],
+    ]
+    if admin:
+        rows.append([InlineKeyboardButton(text="🛠 Admin panel", callback_data="adm:home")])
+    return InlineKeyboardMarkup(inline_keyboard=rows)
+
+
+def admin_panel_kb() -> InlineKeyboardMarkup:
+    return InlineKeyboardMarkup(
+        inline_keyboard=[
+            [
+                InlineKeyboardButton(text="➕ Kino qo'shish", callback_data="adm:add"),
+                InlineKeyboardButton(text="🎬 Kinolar", callback_data="adm:movies"),
+            ],
+            [
+                InlineKeyboardButton(text="📊 Statistika", callback_data="adm:stats"),
+                InlineKeyboardButton(text="📢 Majburiy obuna", callback_data="adm:channels"),
+            ],
+            [
+                InlineKeyboardButton(text="🧩 Shablon", callback_data="adm:tpl"),
+                InlineKeyboardButton(text="📣 E'lon kanali", callback_data="adm:ann"),
+            ],
+            [InlineKeyboardButton(text="✨ Premium emoji", callback_data="adm:emoji")],
+            [InlineKeyboardButton(text="🏠 Bosh menyu", callback_data="u:home")],
+        ]
+    )
+
+
 def announce_kb(is_set: bool) -> InlineKeyboardMarkup:
     rows = [[InlineKeyboardButton(text="📢 Kanalni tanlash", callback_data="ann_set")]]
     if is_set:
         rows.append([InlineKeyboardButton(text="🗑 O'chirish", callback_data="ann_off")])
+    rows.append(_back_row())
     return InlineKeyboardMarkup(inline_keyboard=rows)
 
 
@@ -143,6 +188,7 @@ def emoji_kb(
     rows.append([InlineKeyboardButton(text="🎭 Start stikerini o'rnatish", callback_data="stk_set")])
     if has_sticker:
         rows.append([InlineKeyboardButton(text="🗑 Start stikerini o'chirish", callback_data="stk_off")])
+    rows.append(_back_row())
     return InlineKeyboardMarkup(inline_keyboard=rows)
 
 
@@ -194,6 +240,7 @@ def movies_list_kb(movies: Sequence, page: int, total: int) -> InlineKeyboardMar
     rows.append(
         [InlineKeyboardButton(text="🔎 Kod yoki nom bo'yicha topish", callback_data="find")]
     )
+    rows.append(_back_row())
     return InlineKeyboardMarkup(inline_keyboard=rows)
 
 
@@ -286,6 +333,7 @@ def template_kb(is_custom: bool) -> InlineKeyboardMarkup:
         rows.append(
             [InlineKeyboardButton(text="♻️ Standart shablon", callback_data="tpl_reset")]
         )
+    rows.append(_back_row())
     return InlineKeyboardMarkup(inline_keyboard=rows)
 
 
@@ -294,6 +342,15 @@ def channels_kb(channels: Sequence) -> InlineKeyboardMarkup:
         [
             InlineKeyboardButton(
                 text=f"🗑 {channel['title'] or channel['chat_id']}",
+                callback_data=f"chdel:{channel['chat_id']}",
+            )
+        ]
+        for channel in channels
+    ]
+    rows.append([InlineKeyboardButton(text="➕ Kanal qo'shish", callback_data="chadd")])
+    rows.append(_back_row())
+    return InlineKeyboardMarkup(inline_keyboard=rows)
+}",
                 callback_data=f"chdel:{channel['chat_id']}",
             )
         ]
