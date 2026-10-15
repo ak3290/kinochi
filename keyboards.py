@@ -25,6 +25,15 @@ admin_panel_kb = InlineKeyboardMarkup(
     ]
 )
 
+from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
+
+# Admin panel tugmasi
+admin_panel_kb = InlineKeyboardMarkup(
+    inline_keyboard=[
+        [InlineKeyboardButton(text="⚙️ Admin panel", callback_data="admin_panel")]
+    ]
+)
+
 # Kanal tanlash tugmasi uchun identifikator (javobda ham shu qaytadi)
 CHANNEL_REQUEST_ID = 1
 ANNOUNCE_REQUEST_ID = 2
