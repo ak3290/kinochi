@@ -15,25 +15,6 @@ from config import is_admin
 
 PAGE_SIZE = 8
 
-from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton, ReplyKeyboardMarkup, KeyboardButton
-
-# Agar bu Inline tugma bo'lsa:
-admin_panel_kb = InlineKeyboardMarkup(
-    inline_keyboard=[
-        [InlineKeyboardButton(text="🎬 Kinolar boshqaruvi", callback_data="manage_movies")],
-        [InlineKeyboardButton(text="📊 Statistika", callback_data="stats")]
-    ]
-)
-
-from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
-
-# Admin panel tugmasi
-admin_panel_kb = InlineKeyboardMarkup(
-    inline_keyboard=[
-        [InlineKeyboardButton(text="⚙️ Admin panel", callback_data="admin_panel")]
-    ]
-)
-
 # Kanal tanlash tugmasi uchun identifikator (javobda ham shu qaytadi)
 CHANNEL_REQUEST_ID = 1
 ANNOUNCE_REQUEST_ID = 2
