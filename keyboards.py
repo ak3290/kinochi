@@ -337,6 +337,78 @@ def template_kb(is_custom: bool) -> InlineKeyboardMarkup:
     return InlineKeyboardMarkup(inline_keyboard=rows)
 
 
+def channels_kb(channels: Sequence) -> InlineKeyboardMarkup:
+    rows: list[list[InlineKeyboardButton]] = [
+        [
+            InlineKeyboardButton(
+                text=f"🗑 {channel['title'] or channel['chat_id']}",
+                callback_data=f"chdel:{channel['chat_id']}",
+            )
+        ]
+        for channel in channels
+    ]
+
+    rows.append([
+        InlineKeyboardButton(
+            text="➕ Kanal qo'shish",
+            callback_data="chadd"
+        )
+    ])
+
+    rows.append(_back_row())
+
+    return InlineKeyboardMarkup(inline_keyboard=rows)
+),
+                InlineKeyboardButton(
+                    text="🍿 Nom", callback_data=f"field:title:{movie_id}:{page}"
+                ),
+            ],
+            [
+                InlineKeyboardButton(
+                    text="🇺🇿 Til", callback_data=f"field:language:{movie_id}:{page}"
+                ),
+                InlineKeyboardButton(
+                    text="💾 Sifat", callback_data=f"field:quality:{movie_id}:{page}"
+                ),
+            ],
+            [
+                InlineKeyboardButton(
+                    text="🎞️ Janr", callback_data=f"field:genre:{movie_id}:{page}"
+                ),
+                InlineKeyboardButton(
+                    text="⛔️ Kategoriya", callback_data=f"field:category:{movie_id}:{page}"
+                ),
+            ],
+            [InlineKeyboardButton(text="◀️ Orqaga", callback_data=f"movie:{movie_id}:{page}")],
+        ]
+    )
+
+
+def confirm_delete_kb(movie_id: int, page: int) -> InlineKeyboardMarkup:
+    return InlineKeyboardMarkup(
+        inline_keyboard=[
+            [
+                InlineKeyboardButton(
+                    text="✅ Ha, o'chirilsin", callback_data=f"delyes:{movie_id}:{page}"
+                ),
+                InlineKeyboardButton(
+                    text="❌ Yo'q", callback_data=f"movie:{movie_id}:{page}"
+                ),
+            ]
+        ]
+    )
+
+
+def template_kb(is_custom: bool) -> InlineKeyboardMarkup:
+    rows = [[InlineKeyboardButton(text="✏️ O'zgartirish", callback_data="tpl_edit")]]
+    if is_custom:
+        rows.append(
+            [InlineKeyboardButton(text="♻️ Standart shablon", callback_data="tpl_reset")]
+        )
+    rows.append(_back_row())
+    return InlineKeyboardMarkup(inline_keyboard=rows)
+
+
 
 def channels_kb(channels: Sequence) -> InlineKeyboardMarkup:
     rows: list[list[InlineKeyboardButton]] = [
