@@ -337,6 +337,7 @@ def template_kb(is_custom: bool) -> InlineKeyboardMarkup:
     return InlineKeyboardMarkup(inline_keyboard=rows)
 
 
+
 def channels_kb(channels: Sequence) -> InlineKeyboardMarkup:
     rows: list[list[InlineKeyboardButton]] = [
         [
@@ -347,14 +348,14 @@ def channels_kb(channels: Sequence) -> InlineKeyboardMarkup:
         ]
         for channel in channels
     ]
-    rows.append([InlineKeyboardButton(text="➕ Kanal qo'shish", callback_data="chadd")])
+
+    rows.append([
+        InlineKeyboardButton(
+            text="➕ Kanal qo'shish",
+            callback_data="chadd"
+        )
+    ])
+
     rows.append(_back_row())
-    return InlineKeyboardMarkup(inline_keyboard=rows)
-}",
-                callback_data=f"chdel:{channel['chat_id']}",
-            )
-        ]
-        for channel in channels
-    ]
-    rows.append([InlineKeyboardButton(text="➕ Kanal qo'shish", callback_data="chadd")])
+
     return InlineKeyboardMarkup(inline_keyboard=rows)
